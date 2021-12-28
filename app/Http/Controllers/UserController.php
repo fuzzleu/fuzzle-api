@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Project;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -127,5 +128,10 @@ class UserController extends Controller
                 'token' => $request->header('Authorization')
             ]), JWTAuth::factory()->getTTL()));
         }
+    }
+
+    public function getProjects()
+    {
+        return Project::where(['user_id' => $this->user->id])->get(['name', 'thumbnail']);
     }
 }
