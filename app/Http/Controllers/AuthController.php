@@ -28,7 +28,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'image' => $user->image,
                 'role' => $user->role,
-                'token' => "Bearer " . JWTAuth::attempt($request->only(['name', 'password'])),
+                'token' => "Bearer " . JWTAuth::attempt($request->only(['email', 'password'])),
                 'ttl' => JWTAuth::factory()->getTTL() * 60
             ])
         ], 200);
@@ -72,12 +72,15 @@ class AuthController extends Controller
         $client = new \Google\Client();
         $client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
+
         $client->addScope(\Google\Service\Oauth2::USERINFO_PROFILE . ' email');
         $client->setAccessType('offline');
         $client->setRedirectUri('http://localhost:8000/api/auth/signin/google/callback');
+
         if ($request->header('access_token'))
             return $this->authGoogle($client, $request->header('access_token'));
         $headers = [header('Location: ' . filter_var($client->createAuthUrl(), FILTER_SANITIZE_URL))];
+
         return response(null, 301, $headers);
     }
 
