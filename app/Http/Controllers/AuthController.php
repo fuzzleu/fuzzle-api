@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         $client->addScope(\Google\Service\Oauth2::USERINFO_PROFILE . ' email');
         $client->setAccessType('offline');
-        $client->setRedirectUri('http://localhost:8000/api/auth/signin/google/callback');
+        $client->setRedirectUri('https://fuzzleapi.herokuapp.com/api/auth/signin/google/callback');
 
         if ($request->header('access_token'))
             return $this->authGoogle($client, $request->header('access_token'));
@@ -89,7 +89,7 @@ class AuthController extends Controller
         $client = new \Google\Client();
         $client->setClientId($_ENV['GOOGLE_CLIENT_ID']);
         $client->setClientSecret($_ENV['GOOGLE_CLIENT_SECRET']);
-        $client->setRedirectUri('http://localhost:8000/api/auth/signin/google/callback');
+        $client->setRedirectUri('https://fuzzleapi.herokuapp.com/api/auth/signin/google/callback');
 
         if (!isset($_GET['code'])) {
             $auth_url = $client->createAuthUrl();
